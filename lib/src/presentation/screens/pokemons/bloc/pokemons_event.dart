@@ -8,7 +8,7 @@ abstract class PokemonsEvent extends Equatable {
 
 @immutable
 class GetPokemonsEvent extends PokemonsEvent {
-  late final String params;
+  late final PokemonsParams params;
 
   GetPokemonsEvent(this.params);
 

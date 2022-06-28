@@ -1,4 +1,4 @@
-import 'package:provider/provider.dart';
+import 'package:get_it/get_it.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -10,18 +10,24 @@ import 'package:bed/src/external/adapters/storage/storage_adapter.dart';
 import 'package:bed/src/data/clients/storage/storage_client.dart';
 import 'package:bed/src/data/usecases/storage/local_storage_usecase.dart';
 
-final storageProvider = [
-  Provider<SharedPreferences>.value(
-    value: StorageSingleton.instance.preferences,
-  ),
-  Provider<StorageClient>(
-    create: (context) => StorageAdapter(
-      context.read<SharedPreferences>(),
-    ),
-  ),
-  Provider<StorageUsecase>(
-    create: (context) => LocalStorageUsecase(
-      context.read<StorageClient>(),
-    ),
-  ),
-];
+class StorageInject {
+  late final GetIt _getIt;
+
+  StorageInject(this._getIt);
+
+  void di() {
+    _getIt.registerLazySingleton(() => _getIt<StorageSingleton>());
+
+    _getIt.registerLazySingleton<StorageClient>(
+      () => StorageAdapter(
+        _getIt<SharedPreferences>(),
+      ),
+    );
+
+    _getIt.registerLazySingleton<StorageUsecase>(
+      () => LocalStorageUsecase(
+        _getIt<StorageClient>(),
+      ),
+    );
+  }
+}

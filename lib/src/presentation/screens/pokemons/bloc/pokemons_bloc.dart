@@ -1,3 +1,4 @@
+import 'package:bed/src/domain/entities/pokemons/pokemon_entity.dart';
 import 'package:bloc/bloc.dart';
 
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ part 'pokemons_state.dart';
 part 'pokemons_event.dart';
 
 class PokemonsBloc extends Bloc<PokemonsEvent, PokemonsState> {
+  late List<PokemonEntity> pokemons = [];
   late final PokemonsUseCase _pokemonsUseCase;
 
   PokemonsBloc(this._pokemonsUseCase) : super(PokemonsInitial()) {
@@ -21,13 +23,16 @@ class PokemonsBloc extends Bloc<PokemonsEvent, PokemonsState> {
     GetPokemonsEvent event,
     Emitter<PokemonsState> emit,
   ) async {
-    emit(PokemonsLoading());
+    if (pokemons.isEmpty) emit(PokemonsLoading());
 
-    final data = await _pokemonsUseCase(PokemonsParams(url: event.params));
+    final data = await _pokemonsUseCase(event.params);
 
     data.fold(
       (left) => emit(PokemonsFailure(left.message)),
-      (right) => emit(PokemonsSuccess(right)),
+      (right) {
+        pokemons.addAll(right.results);
+        emit(PokemonsSuccess(right));
+      },
     );
   }
 }
