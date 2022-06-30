@@ -7,8 +7,7 @@ mixin StateMixin<T extends StatefulWidget> on State<T> {
   @override
   void initState() {
     super.initState();
-    createdWidget();
-    // WidgetsBinding.instance.addPostFrameCallback((_) => createdWidget());
+    WidgetsBinding.instance.addPostFrameCallback((_) => createdWidget());
   }
 
   @override

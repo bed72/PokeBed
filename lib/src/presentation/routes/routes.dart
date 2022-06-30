@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:bed/src/external/singletons/navigation_singleton.dart';
 
-import 'package:bed/src/presentation/screens/splash/splash_screen.dart';
 import 'package:bed/src/presentation/screens/pokemons/pokemons_screen.dart';
 
 class Navigation {
@@ -16,14 +15,11 @@ class Navigation {
     late final args = settings.arguments;
 
     switch (settings.name) {
-      case SplashScreen.splashPath:
-        widget = const SplashScreen();
-        break;
       case PokemonsScreen.pokemonsPath:
         widget = const PokemonsScreen();
         break;
       default:
-        widget = const SplashScreen();
+        widget = const PokemonsScreen();
         break;
     }
 

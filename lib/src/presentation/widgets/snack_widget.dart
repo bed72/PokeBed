@@ -7,7 +7,7 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> snackBarWidget({
   return ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text(message),
-      duration: const Duration(seconds: 6),
+      duration: const Duration(seconds: 2),
       action: SnackBarAction(
         onPressed: () {},
         textColor: Theme.of(context).colorScheme.background,

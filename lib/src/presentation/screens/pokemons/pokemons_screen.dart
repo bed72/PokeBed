@@ -1,14 +1,15 @@
-import 'package:bed/src/presentation/utils/debounce/call_debounce.dart';
-import 'package:get_it/get_it.dart';
-
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:bed/src/presentation/extensions/widget_extension.dart';
+
 import 'package:bed/src/domain/constants/app_constant.dart';
 import 'package:bed/src/domain/usecases/pokemons/remote_pokemons_usecase.dart';
 
+import 'package:bed/src/presentation/mixins/state_mixin.dart';
 import 'package:bed/src/presentation/widgets/load_widget.dart';
+import 'package:bed/src/presentation/widgets/snack_widget.dart';
 import 'package:bed/src/presentation/widgets/image_widget.dart';
 import 'package:bed/src/presentation/widgets/failure_widget.dart';
 import 'package:bed/src/presentation/screens/pokemons/cubit/pokemons_cubit.dart';
@@ -22,26 +23,22 @@ class PokemonsScreen extends StatefulWidget {
   State<PokemonsScreen> createState() => _PokemonsScreenState();
 }
 
-class _PokemonsScreenState extends State<PokemonsScreen> {
-  int index = 0;
-
+class _PokemonsScreenState extends State<PokemonsScreen> with StateMixin {
   String _url = '${AppContants.urlPokeApi}?limit=25&offset=0';
 
   late final ScrollController _scrollController;
-  late final PokemonsBloc _bloc = GetIt.instance.get<PokemonsBloc>();
+  late final PokemonsBloc _bloc = widget.locator.get<PokemonsBloc>();
 
   @override
-  void initState() {
+  void createdWidget() {
     _loadPokemons();
     _setupScrollController();
-    super.initState();
   }
 
   @override
-  void dispose() {
+  void destroyWidget() {
     _bloc.close();
     _scrollController.dispose();
-    super.dispose();
   }
 
   void _setupScrollController() {
@@ -50,7 +47,7 @@ class _PokemonsScreenState extends State<PokemonsScreen> {
 
   dynamic _scrollListener() {
     if (_scrollController.offset >=
-            _scrollController.position.maxScrollExtent &&
+            _scrollController.position.maxScrollExtent - 16 &&
         !_scrollController.position.outOfRange) _loadPokemons();
   }
 
@@ -73,17 +70,14 @@ class _PokemonsScreenState extends State<PokemonsScreen> {
               return true;
             }
             if (state is PokemonsPagingLoading) {
-              final snackBar = SnackBar(
-                content: const Text('Loading...'),
-                duration: const Duration(milliseconds: 800),
-                action: SnackBarAction(
-                  label: 'Close',
-                  onPressed: () {},
-                ),
+              snackBarWidget(
+                context: context,
+                message: 'Loading...',
               );
 
-              ScaffoldMessenger.of(context).showSnackBar(snackBar).closed;
+              return false;
             }
+
             return false;
           },
           builder: (_, PokemonsState state) {
@@ -122,13 +116,6 @@ class _PokemonsScreenState extends State<PokemonsScreen> {
     );
   }
 
-  Widget notDataWidget() => const Center(
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 8.0),
-          child: Text('Not data'),
-        ),
-      );
-
   Widget gridItemWidget(int index, String name) {
     return Card(
       child: Column(
@@ -148,10 +135,15 @@ class _PokemonsScreenState extends State<PokemonsScreen> {
               ),
             ),
           ),
-          const SizedBox(
-            height: 6.0,
+          const SizedBox(height: 16.0),
+          Text(
+            name,
+            style: const TextStyle(
+              fontSize: 14.0,
+              letterSpacing: 0.9,
+              fontWeight: FontWeight.w500,
+            ),
           ),
-          Text(name),
         ],
       ),
     );
