@@ -5,7 +5,7 @@ import 'package:bed/src/data/usecases/pokemons/remote_pokemons_usecase.dart';
 import 'package:bed/src/domain/usecases/http/http_usecase.dart';
 import 'package:bed/src/domain/usecases/pokemons/remote_pokemons_usecase.dart';
 
-import 'package:bed/src/presentation/screens/pokemons/bloc/pokemons_bloc.dart';
+import 'package:bed/src/presentation/screens/pokemons/cubit/pokemons_cubit.dart';
 
 class PokemonsInject {
   late final GetIt _getIt;

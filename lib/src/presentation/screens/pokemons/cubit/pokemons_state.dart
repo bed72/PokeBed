@@ -1,4 +1,4 @@
-part of 'pokemons_bloc.dart';
+part of 'pokemons_cubit.dart';
 
 @immutable
 abstract class PokemonsState extends Equatable {
@@ -13,6 +13,9 @@ class PokemonsInitial extends PokemonsState {}
 
 @immutable
 class PokemonsLoading extends PokemonsState {}
+
+@immutable
+class PokemonsPagingLoading extends PokemonsState {}
 
 @immutable
 class PokemonsFailure extends PokemonsState {

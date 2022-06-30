@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-Widget loadImage(String url) {
+Widget loadImageWidget(String url) {
   return CachedNetworkImage(
     imageUrl: url,
     placeholder: (context, url) => const Center(

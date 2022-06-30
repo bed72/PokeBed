@@ -7,7 +7,8 @@ extension PokemonsModel on PokemonsEntity {
       count: json['count'],
       next: json['next'],
       previous: json['previous'],
-      results: _toList(json['results']));
+      results: _toJson(json['results']) // .cast<PokemonEntity>(),
+      );
 
   Map<String, dynamic> toJson() => {
         'count': count,
@@ -16,6 +17,6 @@ extension PokemonsModel on PokemonsEntity {
         'results': results,
       };
 
-  static List<PokemonEntity> _toList(List<dynamic> results) =>
+  static List<PokemonEntity> _toJson(List<dynamic> results) =>
       results.map((json) => PokemonModel.fromJson(json)).toList();
 }
